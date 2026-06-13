@@ -1,0 +1,19 @@
+# dependencies
+node_modules
+
+# environment
+.env
+
+# prisma
+/prisma/migrations/
+# Keep schema.prisma and migrations IF you want to share schema,
+# but exclude the generated client and local DB caches.
+/node_modules/.prisma
+
+# logs
+*.log
+npm-debug.log*
+
+# build
+dist
+build
