@@ -1,6 +1,7 @@
 import {
   getAllActivities,
-  getActivitiesByLeadId
+  getActivitiesByLeadId,
+  getActivityLogs
 } from '../repositories/activity.repository.js';
 
 export const getAllActivitiesService =
@@ -18,3 +19,14 @@ export const getLeadActivitiesService =
     );
 
 };
+
+
+  
+
+
+export const getActivityLogsService =
+  async () => {
+
+    return await getActivityLogs();
+
+  };

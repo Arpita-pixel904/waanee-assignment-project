@@ -50,3 +50,30 @@ export const getLeadActivities =
       next(error);
     }
 };
+
+
+
+export const getActivityLogs =
+  async (
+    req,
+    res,
+    next
+  ) => {
+
+    try {
+
+      const logs =
+        await activityService
+          .getActivityLogsService();
+
+      return res.status(200).json({
+        success: true,
+        data: logs
+      });
+
+    } catch (error) {
+
+      next(error);
+
+    }
+  };

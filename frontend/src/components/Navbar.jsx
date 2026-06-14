@@ -1,69 +1,39 @@
-import {
-  Link,
-  useNavigate
-} from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
-import {
-  useAuth
-} from "../context/AuthContext";
+import { useAuth } from "../context/AuthContext";
 
 const Navbar = () => {
+  const navigate = useNavigate();
 
-  const navigate =
-    useNavigate();
+  const { logout } = useAuth();
 
-  const { logout } =
-    useAuth();
+  const handleLogout = () => {
+    logout();
 
-  const handleLogout =
-    () => {
-
-      logout();
-
-      navigate("/");
-    };
+    navigate("/");
+  };
 
   return (
-
-    <nav
-      className="navbar navbar-dark bg-dark navbar-expand-lg"
-    >
-
-      <div
-        className="container"
-      >
-
-        <Link
-          className="navbar-brand"
-          to="/dashboard"
-        >
+    <nav className="navbar navbar-dark bg-dark navbar-expand-lg">
+      <div className="container">
+        <Link className="navbar-brand" to="/dashboard">
           LMS
         </Link>
 
-        <div
-          className="navbar-nav"
-        >
-
-          <Link
-            className="nav-link"
-            to="/leads"
-          >
+        <div className="navbar-nav">
+          <Link className="nav-link" to="/leads">
             Leads
           </Link>
-
+          <Link to="/activity-logs" className="nav-link">
+            Activity Logs
+          </Link>
         </div>
 
-        <button
-          onClick={handleLogout}
-          className="btn btn-danger"
-        >
+        <button onClick={handleLogout} className="btn btn-danger">
           Logout
         </button>
-
       </div>
-
     </nav>
-
   );
 };
 

@@ -1,8 +1,4 @@
-import {
-  BrowserRouter,
-  Routes,
-  Route
-} from "react-router-dom";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
 
 import Login from "../pages/auth/Login";
 import Dashboard from "../pages/Dashboard/Dashboard";
@@ -13,19 +9,18 @@ import LeadEdit from "../pages/leads/LeadEdit";
 import LeadDetails from "../pages/leads/LeadDetails";
 
 import ProtectedRoute from "../components/ProtectedRoutes";
+import ActivityLogs from "../pages/activity/Activity";
+import Register from "../pages/auth/Register";
 
 const AppRoutes = () => {
-
   return (
     <BrowserRouter>
-
       <Routes>
-
-        <Route
-          path="/"
-          element={<Login />}
-        />
-
+        <Route path="/" element={<Login />} />
+<Route
+  path="/register"
+  element={<Register />}
+/>
         <Route
           path="/dashboard"
           element={
@@ -71,8 +66,15 @@ const AppRoutes = () => {
           }
         />
 
+        <Route
+          path="/activity-logs"
+          element={
+            <ProtectedRoute>
+              <ActivityLogs />
+            </ProtectedRoute>
+          }
+        />
       </Routes>
-
     </BrowserRouter>
   );
 };

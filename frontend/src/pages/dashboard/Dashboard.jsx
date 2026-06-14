@@ -1,3 +1,4 @@
+console.log("Dashboard Rendered");
 import {
   useEffect,
   useState
@@ -24,21 +25,25 @@ const Dashboard = () => {
     setLoading] =
     useState(true);
 
-  useEffect(() => {
-
+useEffect(() => {
+  console.log("useEffect Called");
     fetchStats();
 
   }, []);
 
-  const fetchStats =
-    async () => {
+ const fetchStats = async () => {
 
-      try {
-const response =
-  await getDashboardStats();
+  console.log("fetchStats Called");
 
-console.log("Dashboard API:", response);
+  try {
 
+    const response =
+      await getDashboardStats();
+
+    console.log(
+      "Dashboard Response:",
+      response
+    );
 setStats(response.data);
 
       } catch (error) {

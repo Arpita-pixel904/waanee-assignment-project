@@ -12,77 +12,102 @@ from "../../components/Navbar";
 
 import {
   getLeads,
-  deleteLead
+  deleteLead,
+  updateLeadStatus
 } from "../../services/lead.service";
 
 const LeadList = () => {
 
-  const [leads,
-    setLeads] =
-    useState([]);
+  const [leads, setLeads] = useState([]);
+  const [loading, setLoading] = useState(false);
 
-  const [loading,
-    setLoading] =
-    useState(false);
+  const [search, setSearch] = useState("");
+  const [status, setStatus] = useState("");
+  const [source, setSource] = useState("");
 
-  const [search,
-    setSearch] =
-    useState("");
+  const [page, setPage] = useState(1);
+  const limit = 10;
 
-  const fetchLeads =
-    async () => {
+  const fetchLeads = async () => {
 
-      try {
+    try {
 
-        setLoading(true);
+      setLoading(true);
 
-        const response =
-          await getLeads({
-            search
-          });
+      const response =
+        await getLeads({
+          page,
+          limit,
+          search,
+          status,
+          source
+        });
 
-        setLeads(
-          response.data
-        );
+      setLeads(response.data);
 
-      } catch (error) {
+    } catch (error) {
 
-        console.log(error);
+      console.log(error);
 
-      } finally {
+    } finally {
 
-        setLoading(false);
+      setLoading(false);
 
-      }
-    };
+    }
+  };
 
   useEffect(() => {
 
     fetchLeads();
 
-  }, []);
+  }, [page]);
 
-  const handleSearch =
-    async () => {
+  const handleSearch = () => {
+
+    setPage(1);
+
+    fetchLeads();
+
+  };
+
+  const handleDelete = async (id) => {
+
+    const confirmDelete =
+      window.confirm(
+        "Delete Lead?"
+      );
+
+    if (!confirmDelete)
+      return;
+
+    try {
+
+      await deleteLead(id);
 
       fetchLeads();
 
-    };
+    } catch (error) {
 
-  const handleDelete =
-    async (id) => {
+      console.log(error);
 
-      const confirmDelete =
-        window.confirm(
-          "Delete Lead?"
-        );
+    }
+  };
 
-      if (!confirmDelete)
-        return;
+  const handleStatusChange =
+    async (
+      leadId,
+      newStatus
+    ) => {
 
       try {
 
-        await deleteLead(id);
+        await updateLeadStatus(
+          leadId,
+          {
+            status:
+              newStatus
+          }
+        );
 
         fetchLeads();
 
@@ -98,17 +123,13 @@ const LeadList = () => {
     <>
       <Navbar />
 
-      <div
-        className="container mt-4"
-      >
+      <div className="container mt-4">
 
         <div
           className="d-flex justify-content-between mb-3"
         >
 
-          <h2>
-            Leads
-          </h2>
+          <h2>Leads</h2>
 
           <Link
             to="/leads/create"
@@ -119,13 +140,11 @@ const LeadList = () => {
 
         </div>
 
-        <div
-          className="row mb-3"
-        >
+        {/* Filters */}
 
-          <div
-            className="col-md-4"
-          >
+        <div className="row mb-3">
+
+          <div className="col-md-3">
 
             <input
               className="form-control"
@@ -140,9 +159,58 @@ const LeadList = () => {
 
           </div>
 
-          <div
-            className="col-md-2"
-          >
+          <div className="col-md-3">
+
+            <select
+              className="form-select"
+              value={status}
+              onChange={(e) =>
+                setStatus(
+                  e.target.value
+                )
+              }
+            >
+
+              <option value="">
+                All Status
+              </option>
+
+              <option value="NEW">
+                NEW
+              </option>
+
+              <option value="CONTACTED">
+                CONTACTED
+              </option>
+
+              <option value="QUALIFIED">
+                QUALIFIED
+              </option>
+
+              <option value="CLOSED">
+                CLOSED
+              </option>
+
+            </select>
+
+          </div>
+
+          <div className="col-md-3">
+
+            <input
+              className="form-control"
+              placeholder="Source"
+              value={source}
+              onChange={(e) =>
+                setSource(
+                  e.target.value
+                )
+              }
+            />
+
+          </div>
+
+          <div className="col-md-3">
 
             <button
               onClick={
@@ -165,97 +233,171 @@ const LeadList = () => {
               </h5>
             )
             : (
-              <table
-                className="table table-bordered"
-              >
+              <>
+                <table
+                  className="table table-bordered"
+                >
 
-                <thead>
+                  <thead>
 
-                  <tr>
+                    <tr>
 
-                    <th>ID</th>
-                    <th>Name</th>
-                    <th>Email</th>
-                    <th>Status</th>
-                    <th>Source</th>
-                    <th>Actions</th>
+                      <th>ID</th>
+                      <th>Name</th>
+                      <th>Email</th>
+                      <th>Status</th>
+                      <th>Source</th>
+                      <th>Actions</th>
 
-                  </tr>
+                    </tr>
 
-                </thead>
+                  </thead>
 
-                <tbody>
+                  <tbody>
 
-                  {
-                    leads.map(
-                      (lead) => (
+                    {
+                      leads.map(
+                        (lead) => (
 
-                        <tr
-                          key={lead.id}
-                        >
+                          <tr
+                            key={lead.id}
+                          >
 
-                          <td>
-                            {lead.id}
-                          </td>
+                            <td>
+                              {lead.id}
+                            </td>
 
-                          <td>
-                            {lead.name}
-                          </td>
+                            <td>
+                              {lead.name}
+                            </td>
 
-                          <td>
-                            {lead.email}
-                          </td>
+                            <td>
+                              {lead.email}
+                            </td>
 
-                          <td>
-                            {lead.status}
-                          </td>
+                            <td>
 
-                          <td>
-                            {lead.source}
-                          </td>
+                              <select
+                                value={
+                                  lead.status
+                                }
+                                onChange={(e) =>
+                                  handleStatusChange(
+                                    lead.id,
+                                    e.target.value
+                                  )
+                                }
+                                className="form-select form-select-sm"
+                              >
 
-                          <td>
+                                <option value="NEW">
+                                  NEW
+                                </option>
 
-                            <Link
-                              to={`/leads/${lead.id}`}
-                              className="btn btn-info btn-sm me-2"
-                            >
-                              View
-                            </Link>
+                                <option value="CONTACTED">
+                                  CONTACTED
+                                </option>
 
-                            <Link
-                              to={`/leads/edit/${lead.id}`}
-                              className="btn btn-warning btn-sm me-2"
-                            >
-                              Edit
-                            </Link>
+                                <option value="QUALIFIED">
+                                  QUALIFIED
+                                </option>
 
-                            <button
-                              onClick={() =>
-                                handleDelete(
-                                  lead.id
-                                )
-                              }
-                              className="btn btn-danger btn-sm"
-                            >
-                              Delete
-                            </button>
+                                <option value="CLOSED">
+                                  CLOSED
+                                </option>
 
-                          </td>
+                              </select>
 
-                        </tr>
+                            </td>
 
+                            <td>
+                              {lead.source}
+                            </td>
+
+                            <td>
+
+                              <Link
+                                to={`/leads/${lead.id}`}
+                                className="btn btn-info btn-sm me-2"
+                              >
+                                View
+                              </Link>
+
+                              <Link
+                                to={`/leads/edit/${lead.id}`}
+                                className="btn btn-warning btn-sm me-2"
+                              >
+                                Edit
+                              </Link>
+
+                              <button
+                                onClick={() =>
+                                  handleDelete(
+                                    lead.id
+                                  )
+                                }
+                                className="btn btn-danger btn-sm"
+                              >
+                                Delete
+                              </button>
+
+                            </td>
+
+                          </tr>
+
+                        )
                       )
-                    )
-                  }
+                    }
 
-                </tbody>
+                  </tbody>
 
-              </table>
+                </table>
+
+                {/* Pagination */}
+
+                <div
+                  className="d-flex gap-2"
+                >
+
+                  <button
+                    className="btn btn-outline-primary"
+                    disabled={
+                      page === 1
+                    }
+                    onClick={() =>
+                      setPage(
+                        page - 1
+                      )
+                    }
+                  >
+                    Previous
+                  </button>
+
+                  <span
+                    className="align-self-center"
+                  >
+                    Page {page}
+                  </span>
+
+                  <button
+                    className="btn btn-outline-primary"
+                    onClick={() =>
+                      setPage(
+                        page + 1
+                      )
+                    }
+                  >
+                    Next
+                  </button>
+
+                </div>
+
+              </>
             )
         }
 
       </div>
+
     </>
   );
 };

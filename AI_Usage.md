@@ -1,22 +1,39 @@
-
-
-### 2. AI_USAGE.md
-Create this file in your root project folder.
-
-```markdown
 # AI Usage Disclosure
 
-In accordance with the assessment requirements, the following disclosure details the use of AI tools during the development of this project.
+## AI Tools Used
 
-- **AI Tools Used**: Gemini (Large Language Model)
-- **Purpose**:
-    - Scaffolding project structure (Folder organization, API route design).
-    - Refactoring raw SQL/Sequelize code to type-safe Prisma ORM.
-    - Debugging `ERR_MODULE_NOT_FOUND` issues during migration.
-    - Designing the Round-Robin assignment algorithm logic.
-- **Manual Modifications**:
-    - All business logic (e.g., Auth Middleware, Round-Robin logic) was manually reviewed for security and accuracy.
-    - React components were manually styled and integrated with state management to ensure specific UX requirements were met.
-    - All environment configurations and connection strings were manually implemented.
+Primary Tool:
 
-```
+* ChatGPT (OpenAI)
+
+## Usage
+
+AI assistance was used for:
+
+* Architecture guidance
+* Folder structure planning
+* API design suggestions
+* SQL query optimization
+* React component scaffolding
+* Express middleware setup
+* JWT authentication implementation
+* Documentation generation
+
+## Manual Work Done
+
+The following work was completed manually:
+
+* Database schema design decisions
+* Debugging API issues
+* Route integration
+* Testing endpoints using Postman
+* Frontend integration
+* Error resolution
+* Business logic verification
+* UI adjustments
+* Docker configuration
+* Final project assembly
+
+## Engineering Decisions
+
+All implementation decisions, debugging, testing, and integration were reviewed and validated manually before inclusion in the final project.

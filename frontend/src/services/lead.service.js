@@ -45,3 +45,18 @@ export const deleteLead = async (id) => {
 
   return response.data;
 };
+
+export const updateLeadStatus =
+  async (
+    id,
+    data
+  ) => {
+
+    const response =
+      await api.patch(
+        `/leads/${id}/status`,
+        data
+      );
+
+    return response.data;
+  };

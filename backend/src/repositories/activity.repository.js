@@ -65,3 +65,39 @@ export const getActivitiesByLeadId =
 
     return result.rows;
 };
+
+
+
+export const getActivityLogs =
+  async () => {
+
+    const result =
+      await pool.query(`
+        SELECT
+          al.id,
+          al.lead_id,
+          al.user_id,
+
+          l.name AS lead_name,
+
+          u.full_name AS user_name,
+
+          al.activity_type,
+          al.old_value,
+          al.new_value,
+          al.created_at
+
+        FROM activity_logs al
+
+        LEFT JOIN leads l
+          ON al.lead_id = l.id
+
+        LEFT JOIN users u
+          ON al.user_id = u.id
+
+        ORDER BY
+          al.created_at DESC
+      `);
+
+    return result.rows;
+  };

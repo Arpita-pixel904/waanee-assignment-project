@@ -1,70 +1,241 @@
-This `README.md` and `AI_USAGE.md` are professionally structured to meet the assessment's documentation requirements.
-
-### 1. README.md
-
-Create this file in your root project folder.
-
-```markdown
 # Mini Lead Management System
 
-A full-stack Lead Management System built with Node.js, Express, Prisma (PostgreSQL), and React.
+## Overview
+
+Mini Lead Management System is a full-stack web application built using:
+
+* React.js
+* Node.js
+* Express.js
+* PostgreSQL
+* JWT Authentication
+
+The system allows managers to create leads, automatically assign them to agents, track lead status, and maintain activity logs.
+
+---
 
 ## Features
-- **Authentication**: JWT-based secure login/registration with role-based access control (Admin, Manager, Agent).
-- **Lead Management**: Complete CRUD operations for leads with pagination, filtering, and sorting.
-- **Round-Robin Assignment**: Automated lead assignment logic for efficient workload distribution.
-- **Activity Logging**: Automated tracking of all lead interactions.
-- **External API Integration**: Mock third-party webhook integration for lead notifications.
 
-## Architecture
+### Authentication
 
+* Register User
+* Login User
+* JWT Authentication
+* Role Based Authorization
+* Protected Routes
 
-## Prerequisites
-- Node.js (v20+)
-- PostgreSQL (or Supabase instance)
-- npm or yarn
+Supported Roles:
 
-## Setup Instructions
+* ADMIN
+* MANAGER
+* AGENT
+
+---
+
+### Lead Management
+
+* Create Lead
+* Update Lead
+* Delete Lead
+* Get Lead By Id
+* List Leads
+
+Additional Features:
+
+* Search
+* Pagination
+* Sorting
+* Status Filter
+* Source Filter
+
+---
+
+### Lead Assignment
+
+When a Manager creates a lead:
+
+* Lead is automatically assigned to an available Agent
+
+Current implementation:
+
+* Round Robin (simplified by selecting available agent)
+
+---
+
+### Activity Logs
+
+Tracks:
+
+* Lead Created
+* Lead Updated
+* Lead Assigned
+* Status Changed
+
+---
+
+### Dashboard
+
+Displays:
+
+* Total Leads
+* New Leads
+* Contacted Leads
+* Qualified Leads
+* Closed Leads
+
+---
+
+## Project Structure
 
 ### Backend
-1. `cd backend`
-2. `npm install`
-3. Create a `.env` file:
-   ```env
-   DATABASE_URL="your_postgresql_connection_string"
-   JWT_SECRET="supersecretkey"
-   JWT_EXPIRES_IN="1d"
-   PORT=5000
 
-```
+backend/
 
-4. `npx prisma migrate dev`
-5. `npm run dev`
+* routes/
+* controllers/
+* services/
+* repositories/
+* middleware/
+* utils/
+* database/
 
 ### Frontend
 
-1. `cd frontend`
-2. `npm install`
-3. Create a `.env` file:
-```env
-VITE_API_URL="http://localhost:5000/api"
+frontend/
 
-```
+* pages/
+* components/
+* services/
+* routes/
+* layouts/
 
+---
 
-4. `npm run dev`
+## Environment Variables
+
+Backend (.env)
+
+DB_HOST=localhost
+
+DB_PORT=5432
+
+DB_NAME=lead_management_system
+
+DB_USER=root
+
+DB_PASSWORD=my-password
+
+PORT=3000
+
+JWT_SECRET=your-secret-key
+
+ACCESS_TOKEN_EXPIRY=15m
+
+---
+
+## Database Setup
+
+Run PostgreSQL using Docker:
+
+docker compose up -d
+
+Run SQL schema:
+
+schema.sql
+
+---
+
+## Backend Setup
+
+npm install
+
+npm run dev
+
+Runs on:
+
+http://localhost:3000
+
+---
+
+## Frontend Setup
+
+npm install
+
+npm run dev
+
+Runs on:
+
+http://localhost:5173
+
+---
 
 ## API Documentation
 
-* `POST /api/auth/register` - Create new account
-* `POST /api/auth/login` - Authenticate & receive token
-* `GET /api/leads` - Fetch leads (Supports pagination & status filter)
-* `POST /api/leads` - Create lead (Admin/Manager only)
+Authentication
 
-## Assumptions & Tradeoffs
+POST /api/auth/register
 
-* **Assumptions**: Users are pre-populated or registered by Admin.
-* **Tradeoffs**: Dashboard statistics are calculated client-side to keep the initial API simple; for datasets > 10,000 records, I would implement a dedicated SQL aggregation endpoint to improve performance.
+POST /api/auth/login
 
-```
+GET /api/auth/profile
 
+---
+
+Leads
+
+POST /api/leads
+
+GET /api/leads
+
+GET /api/leads/:id
+
+PUT /api/leads/:id
+
+DELETE /api/leads/:id
+
+PATCH /api/leads/:id/assign
+
+PATCH /api/leads/:id/status
+
+---
+
+Dashboard
+
+GET /api/dashboard/stats
+
+---
+
+Activity Logs
+
+GET /api/activity-logs
+
+---
+
+## Assumptions
+
+* Managers create leads.
+* Managers can manually reassign leads.
+* Admin has full access.
+* Agent can view assigned leads.
+* JWT token is stored in localStorage.
+
+---
+
+## Tradeoffs
+
+* Refresh token flow omitted for simplicity.
+* Basic auto-assignment implemented.
+* Activity logs stored directly in PostgreSQL.
+* Bootstrap used instead of a custom design system.
+
+---
+
+## Future Improvements
+
+* Refresh Token Rotation
+* Redis Caching
+* Email Notifications
+* Background Jobs
+* Swagger Documentation
+* Unit Testing
+* Deployment Pipeline

@@ -1,12 +1,14 @@
 import express from 'express';
 
 import {
+  getActivityLogs,
   getAllActivities,
   getLeadActivities
 } from '../controllers/activity.controller.js';
 
 import {
-  authenticateToken
+  authenticateToken,
+  authorizeRoles
 } from '../middleware/auth.middleware.js';
 
 const activityRoutes = express.Router();
@@ -16,11 +18,11 @@ const activityRoutes = express.Router();
  */
 
 // All Activities
-activityRoutes.get(
-  '/',
-  authenticateToken,
-  getAllActivities
-);
+// activityRoutes.get(
+//   '/',
+//   authenticateToken,
+//   getAllActivities
+// );
 
 // Activity By Lead
 activityRoutes.get(
@@ -29,4 +31,13 @@ activityRoutes.get(
   getLeadActivities
 );
 
+activityRoutes.get(
+  "/",
+  authenticateToken,
+  authorizeRoles(
+    "ADMIN",
+    "MANAGER"
+  ),
+  getActivityLogs
+);
 export default activityRoutes;
