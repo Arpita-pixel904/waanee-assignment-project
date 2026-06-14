@@ -1,0 +1,8 @@
+1
+/var/lib/postgresql/18/docker
+1781358960
+5432
+/var/run/postgresql
+*
+    55132         0
+ready   

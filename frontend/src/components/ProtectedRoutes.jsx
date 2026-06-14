@@ -1,16 +1,22 @@
-import { Navigate } from "react-router-dom";
-import { useAuth } from "../context/AuthContext";
+import {
+  Navigate
+} from "react-router-dom";
 
-const ProtectedRoutes = ({ children }) => {
-  const { user } = useAuth(); // AuthContext se user status check karein
+const ProtectedRoute =
+  ({ children }) => {
 
-  if (!user) {
-    // Agar user logged in nahi hai, toh login page par bhej dein
-    return <Navigate to="/login" />;
-  }
+    const token =
+      localStorage.getItem(
+        "accessToken"
+      );
 
-  // Agar user logged in hai, toh protected content dikhayein
-  return children;
+    if (!token) {
+      return (
+        <Navigate to="/" />
+      );
+    }
+
+    return children;
 };
 
-export default ProtectedRoutes;
+export default ProtectedRoute;
